@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tournoi FC25</title>
+    <img
+      src="./50b1dd20-a1be-497b-ad8c-2c83d97f49a3.png"
+      alt=""
+      class="image-centree"
+    />
+    <style>
+      :root {
+        --primary: #3498db;
+        --secondary: #2ecc71;
+        --dark: #2c3e50;
+        --light: #f9f9f9;
+        --border: #e0e0e0;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Segoe UI", Roboto, Arial, sans-serif;
+        background: var(--light);
+        padding: 2rem;
+        color: var(--dark);
+        line-height: 1.6;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .image-centree {
+        display: block;
+        margin: 20px auto;
+        width: 40%;
+        border-radius: 15px;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        position: relative;
+      }
+
+      h1 {
+        color: var(--primary);
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        color: var(--dark);
+        margin: 1.5rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--primary);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        border: 1px solid var(--border);
+        padding: 0.75rem;
+        text-align: center;
+      }
+
+      thead {
+        background: var(--primary);
+        color: white;
+      }
+
+      tbody tr:nth-child(even) {
+        background: #edf3f7;
+      }
+
+      tbody tr:hover {
+        background: #e1f0fa;
+      }
+
+      /* Suppression des flèches des inputs numériques */
+      input[type="number"] {
+        width: 60px;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+        text-align: center;
+        transition: border 0.3s ease;
+        appearance: textfield; /* Standard */
+        -moz-appearance: textfield; /* Firefox */
+      }
+
+      /* Chrome, Safari, Edge, Opera */
+      input[type="number"]::-webkit-outer-spin-button,
+      input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      input[type="number"]:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: var(--secondary);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        box-shadow: var(--shadow);
+      }
+
+      button:hover {
+        background-color: #27ae60;
+        transform: translateY(-2px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      button.reset {
+        background-color: #e74c3c;
+      }
+
+      button.reset:hover {
+        background-color: #c0392b;
+      }
+
+      button.validate {
+        background-color: #f39c12;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+        margin-top: 10px;
+      }
+
+      button.validate:hover {
+        background-color: #d35400;
+      }
+
+      /* Nouveau style pour le bracket */
+      .bracket-container {
+        margin: 2rem 0;
+        min-height: 350px;
+      }
+
+      .tournament-bracket {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      .round {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 40px;
+      }
+
+      .match-card {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: var(--shadow);
+        min-width: 280px;
+        transition: transform 0.3s ease;
+        position: relative;
+      }
+
+      .match-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .match-card h3 {
+        color: var(--primary);
+        margin-bottom: 1rem;
+      }
+
+      .team-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 8px 0;
+        padding: 5px 0;
+      }
+
+      .score-input {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .versus {
+        margin: 5px 0;
+        font-weight: bold;
+        color: var(--dark);
+      }
+
+      .final-match {
+        margin: 0 auto;
+        position: relative;
+      }
+
+      /* Lignes de connexion entre les matches */
+      .connector-lines {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .line {
+        stroke: var(--primary);
+        stroke-width: 2;
+        fill: none;
+      }
+
+      #winnerDisplay {
+        text-align: center;
+        font-size: 2rem;
+        color: #27ae60;
+        margin-top: 2rem;
+        padding: 1rem;
+        background: rgba(46, 204, 113, 0.1);
+        border-radius: 8px;
+        animation: fadeIn 1s ease;
+        display: none; /* Masquer initialement */
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .error-message {
+        color: #e74c3c;
+        font-size: 0.9rem;
+        text-align: center;
+        margin-top: 0.5rem;
+      }
+
+      .question-mark {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #95a5a6;
+      }
+
+      /* Ajoutez ce style CSS à votre section <style> */
+      .winner-announcement {
+        text-align: center;
+        font-size: 2.5rem;
+        color: #fff;
+        margin-top: 2rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        animation: celebrateWinner 1s ease-in-out;
+        display: none; /* Masquer initialement */
+        position: relative;
+        overflow: hidden;
+      }
+
+      .winner-announcement.tie {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+      }
+
+      @keyframes celebrateWinner {
+        0% {
+          transform: scale(0.7);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        animation: confettiRain 5s ease-in-out infinite;
+      }
+
+      @keyframes confettiRain {
+        0% {
+          transform: translateY(-50px) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(400px) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .trophy-icon {
+        font-size: 3rem;
+        margin-right: 0.5rem;
+        display: inline-block;
+        animation: pulseTrophy 2s infinite;
+      }
+
+      @keyframes pulseTrophy {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @media (max-width: 992px) {
+        .round {
+          flex-direction: column;
+          align-items: center;
+          gap: 20px;
+        }
+
+        .final-match {
+          margin-top: 20px;
+        }
+
+        .connector-lines {
+          display: none;
+        }
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem;
+        }
+
+        .match-card {
+          width: 100%;
+          min-width: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Tournoi FC25</h1>
+    </header>
+
+    <h2>Phase de Poules</h2>
+    <table id="matchTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Rencontre</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="button-container">
+      <button id="calculateBtn">Calculer le Classement</button>
+      <button class="reset" id="resetBtn">Réinitialiser</button>
+    </div>
+
+    <h2>Classement</h2>
+    <table id="rankingTable">
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>Équipe</th>
+          <th>Pts</th>
+          <th>J</th>
+          <th>G</th>
+          <th>N</th>
+          <th>P</th>
+          <th>BP</th>
+          <th>BC</th>
+          <th>Diff</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h2 id="finalPhaseTitle" class="hidden">Phase Finale</h2>
+    <div id="bracketContainer" class="bracket-container hidden">
+      <div class="tournament-bracket">
+        <div class="round">
+          <div class="match-card" id="semifinal1">
+            <h3>Demi-Finale 1</h3>
+            <div class="team-row">
+              <span id="sf1-team1">?</span>
+              <div class="score-input">
+                <input type="number" min="0" id="sf1-score1" />
+              </div>
+            </div>
+            <div class="versus">VS</div>
+            <div class="team-row">
+              <span id="sf1-team2">?</span>
+              <div class="score-input">
+                <input type="number" min="0" id="sf1-score2" />
+              </div>
+            </div>
+            <button class="validate" id="sf1-validate">Valider</button>
+          </div>
+
+          <div class="final-match match-card" id="final">
+            <h3>Finale</h3>
+            <div class="team-row">
+              <span id="final-team1" class="question-mark">?</span>
+              <div class="score-input">
+                <input type="number" min="0" id="final-score1" disabled />
+              </div>
+            </div>
+            <div class="versus">VS</div>
+            <div class="team-row">
+              <span id="final-team2" class="question-mark">?</span>
+              <div class="score-input">
+                <input type="number" min="0" id="final-score2" disabled />
+              </div>
+            </div>
+            <button class="validate" id="final-validate" disabled>
+              Valider
+            </button>
+          </div>
+
+          <div class="match-card" id="semifinal2">
+            <h3>Demi-Finale 2</h3>
+            <div class="team-row">
+              <span id="sf2-team1">?</span>
+              <div class="score-input">
+                <input type="number" min="0" id="sf2-score1" />
+              </div>
+            </div>
+            <div class="versus">VS</div>
+            <div class="team-row">
+              <span id="sf2-team2">?</span>
+              <div class="score-input">
+                <input type="number" min="0" id="sf2-score2" />
+              </div>
+            </div>
+            <button class="validate" id="sf2-validate">Valider</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="winnerDisplay" class="winner-announcement hidden"></div>
+
+    <div id="errorMessage" class="error-message hidden"></div>
+
+    <script>
+      const teams = [
+        "Équipe 1",
+        "Équipe 2",
+        "Équipe 3",
+        "Équipe 4",
+        "Équipe 5",
+        "Équipe 6",
+        "Équipe 7",
+      ];
+      let matches = [];
+      let knockout = {
+        semifinal1: {
+          team1: "",
+          team2: "",
+          score1: "",
+          score2: "",
+          validated: false,
+        },
+        semifinal2: {
+          team1: "",
+          team2: "",
+          score1: "",
+          score2: "",
+          validated: false,
+        },
+        final: {
+          team1: "",
+          team2: "",
+          score1: "",
+          score2: "",
+          validated: false,
+        },
+      };
+
+      // Clés de stockage local
+      const STORAGE_KEYS = {
+        MATCHES: "fc25_matches",
+        KNOCKOUT: "fc25_knockout",
+      };
+
+      function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+      }
+
+      function generateMatches() {
+        // Vérifier si des données existent déjà dans le stockage local
+        const savedMatches = localStorage.getItem(STORAGE_KEYS.MATCHES);
+        const savedKnockout = localStorage.getItem(STORAGE_KEYS.KNOCKOUT);
+
+        if (savedMatches) {
+          matches = JSON.parse(savedMatches);
+          renderMatches();
+
+          if (savedKnockout) {
+            knockout = JSON.parse(savedKnockout);
+            if (knockout.semifinal1.team1 !== "") {
+              document
+                .getElementById("finalPhaseTitle")
+                .classList.remove("hidden");
+              document
+                .getElementById("bracketContainer")
+                .classList.remove("hidden");
+              renderKnockout();
+            }
+          }
+
+          // Calculer le classement initial
+          calculateRanking(false);
+        } else {
+          // Générer de nouveaux matchs si aucun n'existe
+          matches = [];
+          for (let i = 0; i < teams.length; i++) {
+            for (let j = i + 1; j < teams.length; j++) {
+              matches.push({
+                team1: teams[i],
+                team2: teams[j],
+                score1: "",
+                score2: "",
+              });
+            }
+          }
+
+          // Au lieu de simplement mélanger les matchs, on les réorganise pour éviter les doublons consécutifs
+          matches = distributeMatchesEvenly(matches);
+
+          saveToLocalStorage();
+          renderMatches();
+          calculateRanking(false);
+        }
+      }
+
+      // Nouvelle fonction pour distribuer les matchs de manière équilibrée
+      function distributeMatchesEvenly(matchesArray) {
+        // On commence par mélanger les matchs pour avoir une base aléatoire
+        shuffle(matchesArray);
+
+        // On réorganise pour éviter qu'une équipe joue deux fois de suite
+        let organizedMatches = [];
+        let remainingMatches = [...matchesArray];
+        let lastTeams = new Set(); // On garde trace des équipes qui viennent de jouer
+
+        // On prend le premier match pour commencer
+        if (remainingMatches.length > 0) {
+          const firstMatch = remainingMatches.shift();
+          organizedMatches.push(firstMatch);
+          lastTeams.add(firstMatch.team1);
+          lastTeams.add(firstMatch.team2);
+        }
+
+        // Tant qu'il reste des matchs à placer
+        while (remainingMatches.length > 0) {
+          // On cherche un match dont aucune équipe n'a joué au match précédent
+          let foundMatch = false;
+
+          for (let i = 0; i < remainingMatches.length; i++) {
+            const match = remainingMatches[i];
+            if (!lastTeams.has(match.team1) && !lastTeams.has(match.team2)) {
+              // Ce match est bon, on l'ajoute
+              organizedMatches.push(match);
+              remainingMatches.splice(i, 1);
+
+              // On met à jour les dernières équipes
+              lastTeams = new Set([match.team1, match.team2]);
+              foundMatch = true;
+              break;
+            }
+          }
+
+          // Si on n'a pas trouvé de match idéal, on prend le premier disponible
+          // et on minimise le nombre d'équipes qui jouent deux fois de suite
+          if (!foundMatch) {
+            let bestMatch = 0;
+            let minConflicts = 3; // Maximum possible est 2
+
+            for (let i = 0; i < remainingMatches.length; i++) {
+              const match = remainingMatches[i];
+              let conflicts = 0;
+              if (lastTeams.has(match.team1)) conflicts++;
+              if (lastTeams.has(match.team2)) conflicts++;
+
+              if (conflicts < minConflicts) {
+                minConflicts = conflicts;
+                bestMatch = i;
+
+                // Si on trouve un match avec un seul conflit, c'est déjà bien
+                if (minConflicts <= 1) break;
+              }
+            }
+
+            // On ajoute le meilleur match trouvé
+            const match = remainingMatches[bestMatch];
+            organizedMatches.push(match);
+            remainingMatches.splice(bestMatch, 1);
+
+            // On met à jour les dernières équipes
+            lastTeams = new Set([match.team1, match.team2]);
+          }
+        }
+
+        return organizedMatches;
+      }
+
+      function saveToLocalStorage() {
+        localStorage.setItem(STORAGE_KEYS.MATCHES, JSON.stringify(matches));
+        localStorage.setItem(STORAGE_KEYS.KNOCKOUT, JSON.stringify(knockout));
+      }
+
+      function renderMatches() {
+        const tbody = document.querySelector("#matchTable tbody");
+        tbody.innerHTML = "";
+        matches.forEach((m, i) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${m.team1} vs ${m.team2}</td>
+          <td>
+            <input type="number" min="0" value="${
+              m.score1
+            }" onchange="updateScore(${i}, 'score1', this.value)"> -
+            <input type="number" min="0" value="${
+              m.score2
+            }" onchange="updateScore(${i}, 'score2', this.value)">
+          </td>`;
+          tbody.appendChild(row);
+        });
+      }
+
+      function showError(message, duration = 3000) {
+        const errorElement = document.getElementById("errorMessage");
+        errorElement.textContent = message;
+        errorElement.classList.remove("hidden");
+
+        setTimeout(() => {
+          errorElement.classList.add("hidden");
+        }, duration);
+      }
+
+      function updateScore(i, key, val) {
+        // Validation des scores
+        if (val === "") {
+          matches[i][key] = "";
+        } else {
+          const score = parseInt(val);
+          if (isNaN(score) || score < 0) {
+            showError("Les scores négatifs ne sont pas autorisés.");
+            // Réinitialiser la valeur dans l'interface
+            renderMatches();
+            return;
+          }
+          matches[i][key] = score.toString();
+        }
+
+        saveToLocalStorage();
+        calculateRanking(false);
+      }
+
+      function allScoresFilled() {
+        return matches.every((m) => m.score1 !== "" && m.score2 !== "");
+      }
+
+      function calculateRanking(initFinal = false) {
+        const stats = {};
+        teams.forEach((t) => {
+          stats[t] = {
+            pts: 0,
+            played: 0,
+            wins: 0,
+            draws: 0,
+            losses: 0,
+            goalsFor: 0,
+            goalsAgainst: 0,
+            diff: 0,
+          };
+        });
+
+        matches.forEach((m) => {
+          const score1 = parseInt(m.score1);
+          const score2 = parseInt(m.score2);
+
+          if (!isNaN(score1) && !isNaN(score2)) {
+            // Mettre à jour les statistiques pour l'équipe 1
+            stats[m.team1].played++;
+            stats[m.team1].goalsFor += score1;
+            stats[m.team1].goalsAgainst += score2;
+            stats[m.team1].diff += score1 - score2;
+
+            // Mettre à jour les statistiques pour l'équipe 2
+            stats[m.team2].played++;
+            stats[m.team2].goalsFor += score2;
+            stats[m.team2].goalsAgainst += score1;
+            stats[m.team2].diff += score2 - score1;
+
+            // Attribuer les points et les résultats
+            if (score1 > score2) {
+              stats[m.team1].pts += 3;
+              stats[m.team1].wins++;
+              stats[m.team2].losses++;
+            } else if (score2 > score1) {
+              stats[m.team2].pts += 3;
+              stats[m.team2].wins++;
+              stats[m.team1].losses++;
+            } else {
+              stats[m.team1].pts++;
+              stats[m.team2].pts++;
+              stats[m.team1].draws++;
+              stats[m.team2].draws++;
+            }
+          }
+        });
+
+        // Trier les équipes selon les critères : points > différence de buts > buts marqués
+        const sorted = teams.slice().sort((a, b) => {
+          if (stats[b].pts !== stats[a].pts) {
+            return stats[b].pts - stats[a].pts;
+          }
+          if (stats[b].diff !== stats[a].diff) {
+            return stats[b].diff - stats[a].diff;
+          }
+          return stats[b].goalsFor - stats[a].goalsFor;
+        });
+
+        // Mettre à jour le tableau de classement
+        const tbody = document.querySelector("#rankingTable tbody");
+        tbody.innerHTML = "";
+        sorted.forEach((team, index) => {
+          const teamStats = stats[team];
+          const row = document.createElement("tr");
+          row.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${team}</td>
+      <td>${teamStats.pts}</td>
+      <td>${teamStats.played}</td>
+      <td>${teamStats.wins}</td>
+      <td>${teamStats.draws}</td>
+      <td>${teamStats.losses}</td>
+      <td>${teamStats.goalsFor}</td>
+      <td>${teamStats.goalsAgainst}</td>
+      <td>${teamStats.diff}</td>
+    `;
+          tbody.appendChild(row);
+        });
+
+        // Initialiser la phase finale si tous les scores sont remplis
+        if (
+          initFinal &&
+          allScoresFilled() &&
+          knockout.semifinal1.team1 === ""
+        ) {
+          const qualified = sorted.slice(0, 4);
+
+          knockout.semifinal1 = {
+            team1: qualified[0],
+            team2: qualified[3],
+            score1: "",
+            score2: "",
+            validated: false,
+          };
+
+          knockout.semifinal2 = {
+            team1: qualified[1],
+            team2: qualified[2],
+            score1: "",
+            score2: "",
+            validated: false,
+          };
+
+          document.getElementById("finalPhaseTitle").classList.remove("hidden");
+          document
+            .getElementById("bracketContainer")
+            .classList.remove("hidden");
+
+          saveToLocalStorage();
+          renderKnockout();
+        }
+      }
+
+      function renderKnockout() {
+        document.getElementById("finalPhaseTitle").classList.remove("hidden");
+        document.getElementById("bracketContainer").classList.remove("hidden");
+
+        // Demi-finale 1
+        const sf1 = knockout.semifinal1;
+        document.getElementById("sf1-team1").textContent = sf1.team1;
+        document.getElementById("sf1-team2").textContent = sf1.team2;
+
+        const sf1Input1 = document.getElementById("sf1-score1");
+        const sf1Input2 = document.getElementById("sf1-score2");
+        sf1Input1.value = sf1.score1;
+        sf1Input2.value = sf1.score2;
+
+        // Demi-finale 2
+        const sf2 = knockout.semifinal2;
+        document.getElementById("sf2-team1").textContent = sf2.team1;
+        document.getElementById("sf2-team2").textContent = sf2.team2;
+
+        const sf2Input1 = document.getElementById("sf2-score1");
+        const sf2Input2 = document.getElementById("sf2-score2");
+        sf2Input1.value = sf2.score1;
+        sf2Input2.value = sf2.score2;
+
+        // Activer/désactiver les inputs et boutons selon l'état
+        sf1Input1.disabled = sf1.validated;
+        sf1Input2.disabled = sf1.validated;
+        document.getElementById("sf1-validate").disabled = sf1.validated;
+
+        sf2Input1.disabled = sf2.validated;
+        sf2Input2.disabled = sf2.validated;
+        document.getElementById("sf2-validate").disabled = sf2.validated;
+
+        // Mettre à jour l'affichage de la finale
+        const final = knockout.final;
+
+        // Afficher le premier finaliste si la première demi-finale est validée
+        if (sf1.validated) {
+          const winner1 =
+            parseInt(sf1.score1) > parseInt(sf1.score2) ? sf1.team1 : sf1.team2;
+          document.getElementById("final-team1").textContent = winner1;
+          document
+            .getElementById("final-team1")
+            .classList.remove("question-mark");
+          if (final.team1 === "") {
+            final.team1 = winner1;
+          }
+        }
+
+        // Afficher le second finaliste si la seconde demi-finale est validée
+        if (sf2.validated) {
+          const winner2 =
+            parseInt(sf2.score1) > parseInt(sf2.score2) ? sf2.team1 : sf2.team2;
+          document.getElementById("final-team2").textContent = winner2;
+          document
+            .getElementById("final-team2")
+            .classList.remove("question-mark");
+          if (final.team2 === "") {
+            final.team2 = winner2;
+          }
+        }
+
+        // Mettre à jour les inputs de la finale et activer si les deux demi-finales sont validées
+        const finalInput1 = document.getElementById("final-score1");
+        const finalInput2 = document.getElementById("final-score2");
+        finalInput1.value = final.score1;
+        finalInput2.value = final.score2;
+
+        // Activer les inputs de la finale uniquement si les deux demi-finales sont validées
+        const finalValidateBtn = document.getElementById("final-validate");
+        if (sf1.validated && sf2.validated) {
+          finalInput1.disabled = final.validated;
+          finalInput2.disabled = final.validated;
+          finalValidateBtn.disabled = final.validated;
+        } else {
+          finalInput1.disabled = true;
+          finalInput2.disabled = true;
+          finalValidateBtn.disabled = true;
+        }
+
+        // Afficher le vainqueur si la finale est validée
+        if (final.validated) {
+          const winnerDisplay = document.getElementById("winnerDisplay");
+          let winnerText = "";
+          if (parseInt(final.score1) === parseInt(final.score2)) {
+            winnerText = `⚽ Match nul en finale entre ${final.team1} et ${final.team2}`;
+          } else {
+            const winner =
+              parseInt(final.score1) > parseInt(final.score2)
+                ? final.team1
+                : final.team2;
+            winnerText = `🏆 Vainqueur : ${winner}`;
+          }
+          winnerDisplay.textContent = winnerText;
+          winnerDisplay.classList.remove("hidden");
+        }
+      }
+
+      function validateMatch(stage) {
+        const match = knockout[stage];
+
+        // Vérifier que les scores sont remplis
+        if (match.score1 === "" || match.score2 === "") {
+          showError("Veuillez entrer les scores des deux équipes.");
+          return;
+        }
+
+        // Valider le match
+        match.validated = true;
+
+        // Mettre à jour la finale progressivement
+        if (stage === "semifinal1" || stage === "semifinal2") {
+          const winner =
+            parseInt(match.score1) > parseInt(match.score2)
+              ? match.team1
+              : match.team2;
+
+          // Mettre à jour le finaliste correspondant
+          if (stage === "semifinal1") {
+            knockout.final.team1 = winner;
+            document.getElementById("final-team1").textContent = winner;
+            document
+              .getElementById("final-team1")
+              .classList.remove("question-mark");
+          } else {
+            knockout.final.team2 = winner;
+            document.getElementById("final-team2").textContent = winner;
+            document
+              .getElementById("final-team2")
+              .classList.remove("question-mark");
+          }
+
+          // Activer les inputs de la finale si les deux demi-finales sont validées
+          if (knockout.semifinal1.validated && knockout.semifinal2.validated) {
+            document.getElementById("final-score1").disabled = false;
+            document.getElementById("final-score2").disabled = false;
+            document.getElementById("final-validate").disabled = false;
+          }
+        } else if (stage === "final") {
+          // Afficher le vainqueur final avec animation
+          const winnerDisplay = document.getElementById("winnerDisplay");
+          let winnerText = "";
+          let isTie = false;
+
+          if (parseInt(match.score1) === parseInt(match.score2)) {
+            winnerText = `⚽ Match nul en finale entre ${match.team1} et ${match.team2}`;
+            isTie = true;
+          } else {
+            const winner =
+              parseInt(match.score1) > parseInt(match.score2)
+                ? match.team1
+                : match.team2;
+            winnerText = `<span class="trophy-icon">🏆</span> Vainqueur du tournoi : ${winner}`;
+          }
+
+          // Ajouter la classe pour le style (match nul ou vainqueur)
+          winnerDisplay.className = "winner-announcement";
+          if (isTie) {
+            winnerDisplay.classList.add("tie");
+          }
+
+          winnerDisplay.innerHTML = winnerText;
+          winnerDisplay.style.display = "block";
+
+          // Ajouter des confettis animés pour le vainqueur (pas pour un match nul)
+          if (!isTie) {
+            addConfetti(winnerDisplay);
+          }
+
+          // Faire défiler l'écran jusqu'à l'annonce du vainqueur
+          setTimeout(() => {
+            winnerDisplay.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+          }, 100);
+        }
+
+        saveToLocalStorage();
+        renderKnockout();
+      }
+
+      function resetTournament() {
+        if (
+          confirm(
+            "Êtes-vous sûr de vouloir réinitialiser le tournoi ? Toutes les données seront perdues."
+          )
+        ) {
+          matches = [];
+          knockout = {
+            semifinal1: {
+              team1: "",
+              team2: "",
+              score1: "",
+              score2: "",
+              validated: false,
+            },
+            semifinal2: {
+              team1: "",
+              team2: "",
+              score1: "",
+              score2: "",
+              validated: false,
+            },
+            final: {
+              team1: "",
+              team2: "",
+              score1: "",
+              score2: "",
+              validated: false,
+            },
+          };
+          localStorage.removeItem(STORAGE_KEYS.MATCHES);
+          localStorage.removeItem(STORAGE_KEYS.KNOCKOUT);
+          document.getElementById("bracketContainer").classList.add("hidden");
+          document.getElementById("finalPhaseTitle").classList.add("hidden");
+          document.getElementById("winnerDisplay").classList.add("hidden");
+          generateMatches();
+          calculateRanking(false);
+        }
+      }
+
+      // Nouvelle fonction pour ajouter des confettis animés
+      function addConfetti(element) {
+        // Ajouter 30 confettis colorés
+        const colors = [
+          "#f39c12",
+          "#e74c3c",
+          "#3498db",
+          "#2ecc71",
+          "#9b59b6",
+          "#f1c40f",
+        ];
+
+        for (let i = 0; i < 30; i++) {
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+
+          // Position aléatoire
+          confetti.style.left = `${Math.random() * 100}%`;
+
+          // Couleur aléatoire
+          confetti.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)];
+
+          // Taille aléatoire
+          const size = Math.floor(Math.random() * 10) + 5;
+          confetti.style.width = `${size}px`;
+          confetti.style.height = `${size}px`;
+
+          // Délai aléatoire
+          confetti.style.animationDelay = `${Math.random() * 2}s`;
+
+          // Durée aléatoire
+          confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+
+          element.appendChild(confetti);
+        }
+      }
+
+      // Initialiser le tournoi au chargement de la page
+      window.addEventListener("DOMContentLoaded", () => {
+        // Ajouter les écouteurs d'événements pour les boutons
+        document
+          .getElementById("calculateBtn")
+          .addEventListener("click", () => calculateRanking(true));
+        document
+          .getElementById("resetBtn")
+          .addEventListener("click", resetTournament);
+        document
+          .getElementById("sf1-validate")
+          .addEventListener("click", () => validateMatch("semifinal1"));
+        document
+          .getElementById("sf2-validate")
+          .addEventListener("click", () => validateMatch("semifinal2"));
+        document
+          .getElementById("final-validate")
+          .addEventListener("click", () => validateMatch("final"));
+
+        // Ajouter les écouteurs pour les inputs des demi-finales
+        document.getElementById("sf1-score1").addEventListener("input", (e) => {
+          knockout.semifinal1.score1 = e.target.value;
+        });
+        document.getElementById("sf1-score2").addEventListener("input", (e) => {
+          knockout.semifinal1.score2 = e.target.value;
+        });
+        document.getElementById("sf2-score1").addEventListener("input", (e) => {
+          knockout.semifinal2.score1 = e.target.value;
+        });
+        document.getElementById("sf2-score2").addEventListener("input", (e) => {
+          knockout.semifinal2.score2 = e.target.value;
+        });
+        document
+          .getElementById("final-score1")
+          .addEventListener("input", (e) => {
+            knockout.final.score1 = e.target.value;
+          });
+        document
+          .getElementById("final-score2")
+          .addEventListener("input", (e) => {
+            knockout.final.score2 = e.target.value;
+          });
+
+        generateMatches();
+      });
+    </script>
+  </body>
+</html>
