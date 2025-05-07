@@ -531,23 +531,14 @@
     <div id="errorMessage" class="error-message hidden"></div>
 
     <script>
-      // Si l'URL ne contient pas déjà un paramètre ?v=...
-      if (!location.search.includes("v=")) {
-        const timestamp = new Date().getTime();
-        // Recharge la page avec le paramètre de version
-        location.replace(location.pathname + "?v=" + timestamp);
-      }
-    </script>
-
-    <script>
       const teams = [
         "Ali Haitem (RMA)",
         "Adam Dorian (MCI)",
         "Naïm Bessem (FRA)",
         "Zak Heikel (LIV)",
-        "Ouma Sherif (FCB)",
+        "Ouma Sherif (BAY)",
         "Chakib Idi (POR)",
-        "Aymen Ayoub (BAR)",
+        "Aymen Ayoub (FCB)",
       ];
       let matches = [];
       let knockout = {
