@@ -258,9 +258,10 @@
       }
 
       .versus {
-        margin: 5px 0;
+        margin: 5px 10px;
         font-weight: bold;
         color: var(--dark);
+        font-size: 1.3rem; /* ajoute cette ligne */
       }
 
       .final-match {
@@ -531,15 +532,35 @@
     <div id="errorMessage" class="error-message hidden"></div>
 
     <script>
+      function formatTeamNameWithLogo(name) {
+        const match = name.match(/\((\w+)\)/);
+        if (!match) return name;
+        const code = match[1];
+        const logoUrl = logos[code];
+        if (!logoUrl) return name;
+
+        const nameWithoutCode = name.replace(/\s*\(\w+\)/, ""); // supprime " (XXX)"
+        return `${nameWithoutCode} <img src="${logoUrl}" alt="${code}" style="width:20px; vertical-align:middle;" />`;
+      }
+
       const teams = [
-        "Ali Haitem (RMA)",
-        "Adam Dorian (MCI)",
-        "Naïm Bessem (FRA)",
-        "Zak Heikel (LIV)",
-        "Ouma Sherif (BAY)",
-        "Chakib Idi (POR)",
-        "Aymen Ayoub (FCB)",
+        "Ali & Haitem (RMA)",
+        "Adam & Dorian (MCI)",
+        "Naïm & Bessem (FRA)",
+        "Zak & Heikel (LIV)",
+        "Ouma & Sherif (BAY)",
+        "Chakib & Idi (POR)",
+        "Aymen & Ayoub (FCB)",
       ];
+      const logos = {
+        RMA: "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
+        MCI: "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg",
+        FRA: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_France.svg/langfr-500px-Flag_of_France.svg.png",
+        LIV: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg",
+        FCB: "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
+        POR: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Flag_of_Portugal_%28alternate%29.svg/langfr-500px-Flag_of_Portugal_%28alternate%29.svg.png",
+        BAY: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/500px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png",
+      };
       let matches = [];
       let knockout = {
         semifinal1: {
@@ -723,7 +744,9 @@
 
           row.innerHTML = `
     <td>${i + 1}</td>
-    <td>${m.team1} vs ${m.team2}</td>
+    <td>${formatTeamNameWithLogo(
+      m.team1
+    )} <span class="versus">vs</span> ${formatTeamNameWithLogo(m.team2)}</td>
     <td>
       <input type="number" min="0" value="${m.score1}" 
         onchange="updateScore(${i}, 'score1', this.value)" 
@@ -861,7 +884,7 @@
 
           row.innerHTML = `
       <td>${index + 1}</td>
-      <td>${team}</td>
+      <td>${formatTeamNameWithLogo(team)}</td>
       <td>${teamStats.pts}</td>
       <td>${teamStats.played}</td>
       <td>${teamStats.wins}</td>
