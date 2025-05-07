@@ -531,6 +531,15 @@
     <div id="errorMessage" class="error-message hidden"></div>
 
     <script>
+      // Si l'URL ne contient pas déjà un paramètre ?v=...
+      if (!location.search.includes("v=")) {
+        const timestamp = new Date().getTime();
+        // Recharge la page avec le paramètre de version
+        location.replace(location.pathname + "?v=" + timestamp);
+      }
+    </script>
+
+    <script>
       const teams = [
         "Ali Haitem (RMA)",
         "Adam Dorian (MCI)",
