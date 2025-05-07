@@ -990,7 +990,6 @@
         document.getElementById("finalPhaseTitle").classList.remove("hidden");
         document.getElementById("bracketContainer").classList.remove("hidden");
 
-        // Récupérer les objets de knock-out
         const sf1 = knockout.semifinal1;
         const sf2 = knockout.semifinal2;
         const final = knockout.final;
@@ -1012,103 +1011,76 @@
         sf2Input1.value = sf2.score1;
         sf2Input2.value = sf2.score2;
 
-        // Pour la demi-finale 1
+        // Boutons demi-finales
+        const sf1ValidateBtn = document.getElementById("sf1-validate");
+        const sf2ValidateBtn = document.getElementById("sf2-validate");
+
         if (sf1.validated) {
-          document.getElementById("sf1-validate").textContent = "Modifier";
-          document.getElementById("sf1-validate").style.backgroundColor =
-            "#e67e22";
-          document.getElementById("sf1-validate").onclick = function () {
+          sf1ValidateBtn.textContent = "Modifier";
+          sf1ValidateBtn.style.backgroundColor = "#e67e22";
+          sf1ValidateBtn.onclick = function () {
             editKnockoutMatch("semifinal1");
           };
         } else {
-          document.getElementById("sf1-validate").textContent = "Valider";
-          document.getElementById("sf1-validate").style.backgroundColor = "";
-          document.getElementById("sf1-validate").onclick = function () {
+          sf1ValidateBtn.textContent = "Valider";
+          sf1ValidateBtn.style.backgroundColor = "";
+          sf1ValidateBtn.onclick = function () {
             validateMatch("semifinal1");
           };
         }
 
-        // Pour la demi-finale 2
         if (sf2.validated) {
-          document.getElementById("sf2-validate").textContent = "Modifier";
-          document.getElementById("sf2-validate").style.backgroundColor =
-            "#e67e22";
-          document.getElementById("sf2-validate").onclick = function () {
+          sf2ValidateBtn.textContent = "Modifier";
+          sf2ValidateBtn.style.backgroundColor = "#e67e22";
+          sf2ValidateBtn.onclick = function () {
             editKnockoutMatch("semifinal2");
           };
         } else {
-          document.getElementById("sf2-validate").textContent = "Valider";
-          document.getElementById("sf2-validate").style.backgroundColor = "";
-          document.getElementById("sf2-validate").onclick = function () {
+          sf2ValidateBtn.textContent = "Valider";
+          sf2ValidateBtn.style.backgroundColor = "";
+          sf2ValidateBtn.onclick = function () {
             validateMatch("semifinal2");
           };
         }
 
-        // Pour la finale
-        if (final.validated) {
-          document.getElementById("final-validate").textContent = "Modifier";
-          document.getElementById("final-validate").style.backgroundColor =
-            "#e67e22";
-          document.getElementById("final-validate").onclick = function () {
-            editKnockoutMatch("final");
-          };
-        } else {
-          document.getElementById("final-validate").textContent = "Valider";
-          document.getElementById("final-validate").style.backgroundColor = "";
-          document.getElementById("final-validate").onclick = function () {
-            validateMatch("final");
-          };
-        }
-
-        // Activer/désactiver les inputs et boutons selon l'état
         sf1Input1.disabled = sf1.validated;
         sf1Input2.disabled = sf1.validated;
-        document.getElementById("sf1-validate").disabled = false;
-
         sf2Input1.disabled = sf2.validated;
         sf2Input2.disabled = sf2.validated;
-        document.getElementById("sf2-validate").disabled = false;
 
-        // Mettre à jour l'affichage de la finale
+        // Finalistes
         const finalTeam1El = document.getElementById("final-team1");
         const finalTeam2El = document.getElementById("final-team2");
 
-        // Afficher le premier finaliste si la première demi-finale est validée
         if (sf1.validated) {
           const winner1 =
             parseInt(sf1.score1) > parseInt(sf1.score2) ? sf1.team1 : sf1.team2;
           finalTeam1El.textContent = winner1;
           finalTeam1El.classList.remove("question-mark");
-          if (final.team1 === "") {
-            final.team1 = winner1;
-          }
+          final.team1 = winner1;
         } else {
           finalTeam1El.textContent = "?";
           finalTeam1El.classList.add("question-mark");
         }
 
-        // Afficher le second finaliste si la seconde demi-finale est validée
         if (sf2.validated) {
           const winner2 =
             parseInt(sf2.score1) > parseInt(sf2.score2) ? sf2.team1 : sf2.team2;
           finalTeam2El.textContent = winner2;
           finalTeam2El.classList.remove("question-mark");
-          if (final.team2 === "") {
-            final.team2 = winner2;
-          }
+          final.team2 = winner2;
         } else {
           finalTeam2El.textContent = "?";
           finalTeam2El.classList.add("question-mark");
         }
 
-        // Mettre à jour les inputs de la finale et activer si les deux demi-finales sont validées
         const finalInput1 = document.getElementById("final-score1");
         const finalInput2 = document.getElementById("final-score2");
+        const finalValidateBtn = document.getElementById("final-validate");
+
         finalInput1.value = final.score1;
         finalInput2.value = final.score2;
 
-        // Activer les inputs de la finale uniquement si les deux demi-finales sont validées
-        const finalValidateBtn = document.getElementById("final-validate");
         if (sf1.validated && sf2.validated) {
           finalInput1.disabled = final.validated;
           finalInput2.disabled = final.validated;
@@ -1119,7 +1091,6 @@
           finalValidateBtn.disabled = true;
         }
 
-        // Afficher le vainqueur si la finale est validée
         if (final.validated) {
           const winnerDisplay = document.getElementById("winnerDisplay");
           let winnerText = "";
